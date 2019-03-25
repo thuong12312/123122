@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+long m,n;
+int row[3] = {1,1,1};
+int col[3] = {0,-1,1};
+queue< vector<int> > q;
+
+bool isValid(char coor, bool visited, int x, int y){
+    return coor=='E' && !visited && x>=1 && x<=m && y>=1 && y<=n;
+}
+
+int main(){
+    cin >> n >> m;
+    char mat[m+1][n+1];
+    bool visited[m+1][n+1];
+    for ( int i = 1; i <= m; ++i ){
+        for ( int j = 1; j <= n; ++j ){
+            cin >> mat[i][j];
+            visited[i][j] = false;
+            if ( mat[i][j] == 'Y' ){
+                q.push( {i,j} );
+                visited[i][j] = true;
+            }
+        }
+    }
+    while ( !q.empty() ){
+        int x = q.front()[0], y = q.front()[1];
+        q.pop();
+        if ( x == m ){
+            cout << "YES" << endl;
+            return 0;
+        }
+        for ( int i = 0; i < 3; ++i ){
+            int x_next = x + row[i], y_next = y + col[i];
+            if ( isValid( mat[ x_next ][ y_next ], visited[ x_next ][ y_next ], x_next, y_next ) ){
+                if ( mat[x][y_next] != 'R' ){
+                    visited[ x_next ][ y_next ] = true;
+                    q.push( { x_next, y_next } );
+                }
+            }
+        }
+    }
+    cout << "NO" << endl;
+    return 0;
+}
